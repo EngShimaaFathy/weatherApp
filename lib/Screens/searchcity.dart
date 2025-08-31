@@ -2,8 +2,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weatherapp/cuibets/get_weather/get_weather_cubit.dart';
 import 'package:weatherapp/services/weather_Services.dart';
-import 'package:weatherapp/Screens/weathertemp.dart';
+import 'package:weatherapp/widgets/weathertemp.dart';
 import '../models/weather_model.dart';
 
 class SearchCity extends StatelessWidget {
@@ -23,46 +25,34 @@ class SearchCity extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Center(
           child: Form(child:
-          Column(
-            children: [
-              TextField(
-                controller: _controller,
-                decoration:InputDecoration(
+          TextField(
+            controller: _controller,
+            decoration:InputDecoration(
 
-                  labelText: 'Search',
-                  suffixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-
-
-             /*  onSubmitted: (value) async {
-
-
-                 // WeatherModel weatherModel=await WeatherServices(Dio(),
-                //  ).getCurrentWeather(cityName: value);
-
-                 WeatherModel weatherModel=await WeatherServices(Dio()).getCurrentWeather(cityName: value);
-
-                  print(weatherModel);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WeatherTempurture(WeatherModel:weatherModel)));
-                  print('edit finished');
-                },*/
-
+              labelText: 'Search',
+              suffixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              ElevatedButton(onPressed: () {
-                String fieldValue=_controller.text;
-                //WeatherModel weatherModel=await WeatherServices(Dio()).getCurrentWeather(cityName: fieldValue);
+            ),
 
-                //print(weatherModel);
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>WeatherTempurture()));
-                print('edit finished');
-              },
-                  child: Text('search ')
 
-              )
-            ],
+           onSubmitted: (value) async {
+
+
+             // WeatherModel weatherModel=await WeatherServices(Dio(),
+            //  ).getCurrentWeather(cityName: value);
+
+             WeatherModel weatherModel=await WeatherServices(Dio()).getCurrentWeather(cityName: value);
+
+             var getWeatherCubit=BlocProvider.of<GetWeatherCubit>(context);
+             getWeatherCubit.GetWeather(cityName: value);
+              print("done");
+
+              Navigator.pop(context);
+              print('edit finished');
+            },
+
           ),
 
           ),
